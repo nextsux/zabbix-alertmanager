@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/http/httputil"
+	"os"
 	"sync/atomic"
 )
 
@@ -97,6 +99,15 @@ func (api *API) callBytes(method string, params interface{}) ([]byte, error) {
 	req.ContentLength = int64(len(b))
 	req.Header.Add("Content-Type", "application/json-rpc")
 
+	if len(os.Getenv("ZAL_HTTP_DEBUG")) > 0 {
+		dump, err := httputil.DumpRequestOut(req, true)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Printf("[%p] %q", req, dump)
+		}
+	}
+
 	res, err := api.c.Do(req)
 	if err != nil {
 		api.printf("Error   : %s", err)
@@ -108,6 +119,16 @@ func (api *API) callBytes(method string, params interface{}) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if len(os.Getenv("ZAL_HTTP_DEBUG")) > 0 {
+		dump, err := httputil.DumpResponse(res, true)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Printf("[%p] %q", res, dump)
+		}
+	}
+
 	api.printf("Response (%d): %s", res.StatusCode, b)
 	return b, nil
 }

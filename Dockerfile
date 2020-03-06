@@ -1,6 +1,5 @@
-FROM golang:1-alpine AS build
-LABEL Maintainer="info@devopy.io" Description="Fully automated Zabbix and Prometheus Alertmanager integration"
-RUN apk update && apk add make git gcc musl-dev
+FROM golang:1.13-buster AS build
+LABEL Maintainer="jakub.vokoun@wftech.cz" Description="Fully automated Zabbix and Prometheus Alertmanager integration"
 
 ADD . /go/src/github.com/devopyio/zabbix-alertmanager
 
