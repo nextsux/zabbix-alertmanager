@@ -34,7 +34,7 @@ type Trigger struct {
 	Value       ValueType    `json:""`
 	Priority    PriorityType `json:"priority"`
 	Status      StatusType   `json:"status"`
-	Tags        []Tag        `json:"tags"`
+	Tags        []Tag        `json:"tags,omitempty"`
 }
 
 type Tag struct {
